@@ -1,0 +1,100 @@
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Center login container */
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 30px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+/* Form rows */
+.login-form .form-row {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Labels */
+.login-form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Inputs */
+.login-form input[type="email"],
+.login-form input[type="password"] {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border 0.3s;
+}
+
+.login-form input[type="email"]:focus,
+.login-form input[type="password"]:focus {
+    border-color: #007cba;
+    outline: none;
+}
+
+/* Checkbox */
+.login-form input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* Buttons */
+.login-form button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #007cba;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.login-form button[type="submit"]:hover {
+    background-color: #005f8a;
+}
+
+/* Links */
+.login-form a {
+    color: #007cba;
+    text-decoration: none;
+}
+
+.login-form a:hover {
+    text-decoration: underline;
+}
+
+/* Message display */
+#login-message {
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .login-container {
+        margin: 50px 15px;
+        padding: 20px;
+    }
+
+    .login-form button[type="submit"] {
+        font-size: 14px;
+        padding: 10px;
+    }
+}

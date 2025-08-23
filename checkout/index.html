@@ -1,14 +1,103 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>Redirecting...</title>
-		<meta http-equiv="refresh" content="0;url=https://shoping.local/cart/">
-	</head>
-	<body>
-		<script type="text/javascript">
-			window.location = "https://shoping.local/cart/";
-		</script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1 { color: #333; }
+        .item { margin-bottom: 10px; }
+        #placeOrderBtn { background: #28a745; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        #placeOrderBtn:hover { background: #218838; }
+    </style>
+</head>
+<body>
+    <h1>Checkout</h1>
+    <div id="checkoutItems"></div>
+    <p>Total: ₹<span id="checkoutTotal">0</span></p>
+    <button id="placeOrderBtn">Place Order</button>
 
-		<p>You are being redirected to <a href="https://shoping.local/cart/">https://shoping.local/cart/</a></p>
-	</body>
+    <script type="module">
+        // Import Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBWqcmP4_q0dxTtfkMkPKi6EvS61Ghk42s",
+            authDomain: "fresh-basket-e05c0.firebaseapp.com",
+            projectId: "fresh-basket-e05c0",
+            storageBucket: "fresh-basket-e05c0.firebasestorage.app",
+            messagingSenderId: "827276656041",
+            appId: "1:827276656041:web:f400f9bcc6b71b39b058b8",
+            measurementId: "G-FDWJGSH7FR"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getFirestore(app);
+
+        const checkoutItemsDiv = document.getElementById('checkoutItems');
+        const checkoutTotalEl = document.getElementById('checkoutTotal');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+
+        let cartItems = [];
+        let checkoutTotal = 0;
+
+        // Check user authentication
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "/sign-in.html";
+                return;
+            }
+
+            // Fetch cart items from Firestore
+            const cartRef = collection(db, `carts/${user.uid}/items`);
+            const snapshot = await getDocs(cartRef);
+
+            snapshot.forEach((docSnap) => {
+                const item = docSnap.data();
+                cartItems.push({ id: docSnap.id, ...item });
+
+                const div = document.createElement('div');
+                div.classList.add('item');
+                div.innerHTML = `<p>${item.name} - ₹${item.price} x ${item.quantity}</p>`;
+                checkoutItemsDiv.appendChild(div);
+
+                checkoutTotal += item.price * item.quantity;
+            });
+
+            checkoutTotalEl.textContent = checkoutTotal;
+        });
+
+        // Place Order Button Click
+        placeOrderBtn.addEventListener('click', async () => {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            if (cartItems.length === 0) {
+                alert("Cart is empty");
+                return;
+            }
+
+            // Save order to Firestore
+            await addDoc(collection(db, `orders/${user.uid}/userOrders`), {
+                items: cartItems,
+                total: checkoutTotal,
+                createdAt: new Date(),
+                status: "Pending"
+            });
+
+            // Clear the cart
+            for (const item of cartItems) {
+                await deleteDoc(doc(db, `carts/${user.uid}/items/${item.id}`));
+            }
+
+            alert("Order placed successfully!");
+            window.location.href = "/account.html"; // Redirect to account page
+        });
+    </script>
+</body>
 </html>
