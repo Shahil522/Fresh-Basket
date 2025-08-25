@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+  <!-- Add your CSS and other head elements here -->
+  <!-- Firebase core and auth scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="/project-folder/firebase-config.js"></script>
+</head>
+<body>
+    <!-- Add your header and other body elements here -->
+
+    <div id="user-menu" style="display:none;">
+        <span class="user-name"></span>
+        <!-- Add other user menu elements here -->
+    </div>
+
+    <div id="login-menu">
+        <!-- Add your login and register elements here -->
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof auth !== 'undefined') {
+        auth.onAuthStateChanged(function(user) {
+          const userMenu = document.getElementById('user-menu');
+          const loginMenu = document.getElementById('login-menu');
+          if (user) {
+            if (userMenu) {
+              userMenu.style.display = 'block';
+              userMenu.querySelector('.user-name').textContent = user.displayName || user.email;
+            }
+            if (loginMenu) loginMenu.style.display = 'none';
+          } else {
+            if (userMenu) userMenu.style.display = 'none';
+            if (loginMenu) loginMenu.style.display = 'block';
+          }
+        });
+      }
+    });
+    </script>
+</body>
+</html>

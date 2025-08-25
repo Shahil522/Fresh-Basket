@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" prefix="og: http://ogp.me/ns# fb: http://www.facebook.com/2008/fbml">
 <head>
+        <link rel="stylesheet" href="../../project-folder/style.css">
+        <!-- Firebase App (the core Firebase SDK) -->
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+        <!-- Firebase Auth -->
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+        <!-- Firebase Firestore -->
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+        <script>
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyBWqcmP4_q0dxTtfkMkPKi6EvS61Ghk42s",
+                authDomain: "fresh-basket-e05c0.firebaseapp.com",
+                projectId: "fresh-basket-e05c0",
+                storageBucket: "fresh-basket-e05c0.appspot.com",
+                messagingSenderId: "827276656041",
+                appId: "1:827276656041:web:f400f9bcc6b71b39b058b8"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const db = firebase.firestore();
+        </script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 	<title>Lost password &ndash; Vastore</title>

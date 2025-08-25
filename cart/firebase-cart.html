@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Fresh Basket</title>
+    <link rel="stylesheet" href="../project-folder/style.css">
+    <!-- Add any additional static CSS here -->
+</head>
+<body>
+    <header>
+        <h1>My Cart</h1>
+    </header>
+    <main>
+        <div id="cart-items">
+            <!-- Cart items will be rendered here -->
+        </div>
+        <div id="cart-summary">
+            <h2>Summary</h2>
+            <p id="total-price">Total: $0.00</p>
+            <button id="checkout-btn">Checkout</button>
+        </div>
+    </main>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script>
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBWqcmP4_q0dxTtfkMkPKi6EvS61Ghk42s",
+        authDomain: "fresh-basket-e05c0.firebaseapp.com",
+        projectId: "fresh-basket-e05c0",
+        storageBucket: "fresh-basket-e05c0.appspot.com",
+        messagingSenderId: "827276656041",
+        appId: "1:827276656041:web:f400f9bcc6b71b39b058b8"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+
+      // Example: Fetch cart items for the current user (assumes user is signed in)
+      function renderCart() {
+        auth.onAuthStateChanged(user => {
+          if (user) {
+            db.collection('carts').doc(user.uid).collection('items').get()
+              .then(snapshot => {
+                let total = 0;
+                let html = '';
+                snapshot.forEach(doc => {
+                  const item = doc.data();
+                  html += `<div class="cart-item">
+                    <span>${item.name}</span>
+                    <span>Qty: ${item.quantity}</span>
+                    <span>Price: $${item.price}</span>
+                  </div>`;
+                  total += item.price * item.quantity;
+                });
+                document.getElementById('cart-items').innerHTML = html || '<p>Your cart is empty.</p>';
+                document.getElementById('total-price').textContent = `Total: $${total.toFixed(2)}`;
+              });
+          } else {
+            document.getElementById('cart-items').innerHTML = '<p>Please sign in to view your cart.</p>';
+            document.getElementById('total-price').textContent = 'Total: $0.00';
+          }
+        });
+      }
+      renderCart();
+    </script>
+</body>
+</html>

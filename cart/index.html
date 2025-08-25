@@ -3703,6 +3703,26 @@ var wc_order_attribution = {"params":{"lifetime":1.0000000000000001e-5,"session"
 <script type="text/javascript" src="/wp-content/themes/xstore/js/modules/woocommerce.min.js?ver=1.0" id="et_woocommerce-js"></script>
 <script type="text/javascript" src="/wp-content/themes/xstore/js/modules/cart-page.min.js?ver=1.0" id="cart_page-js"></script>
 <script type="text/javascript" src="/wp-content/themes/xstore/js/libs/jquery.lazyload.js?ver=2.0.0" id="jquery_lazyload-js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof auth !== 'undefined') {
+    auth.onAuthStateChanged(function(user) {
+      const userMenu = document.getElementById('user-menu');
+      const loginMenu = document.getElementById('login-menu');
+      if (user) {
+        if (userMenu) {
+          userMenu.style.display = 'block';
+          userMenu.querySelector('.user-name').textContent = user.displayName || user.email;
+        }
+        if (loginMenu) loginMenu.style.display = 'none';
+      } else {
+        if (userMenu) userMenu.style.display = 'none';
+        if (loginMenu) loginMenu.style.display = 'block';
+      }
+    });
+  }
+});
+</script>
 <script type="text/javascript" src="/wp-content/themes/xstore/js/modules/swiper.min.js?ver=1.0" id="et_swiper-slider-js"></script>
 <script type="text/javascript" src="/wp-content/themes/xstore/js/modules/tabs.min.js?ver=1.0" id="etheme-tabs-js"></script>
 <script type="text/javascript" src="/wp-content/plugins/ultimate-member/assets/libs/tipsy/tipsy.min.js?ver=1.0.0a" id="um_tipsy-js"></script>

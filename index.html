@@ -134,22 +134,57 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 var _wpUtilSettings = {"ajax":{"url":"\/wp-admin\/admin-ajax.php"}};
 /* ]]> */
 </script>
-<script type="text/javascript" src="/wp-includes/js/wp-util.min.js?ver=6.8.2" id="wp-util-js"></script>
-<script type="text/javascript" src="/wp-content/plugins/et-core-plugin/packages/sales-booster/assets/js/script.min.js?ver=6.8.2" id="xstore_sales_booster_frontend_js-js"></script>
-<script type="text/javascript" src="/wp-content/plugins/woocommerce/assets/js/jquery-blockui/jquery.blockUI.min.js?ver=2.7.0-wc.10.0.4" id="jquery-blockui-js" defer="defer" data-wp-strategy="defer"></script>
-<script type="text/javascript" id="wc-add-to-cart-js-extra">
-/* <![CDATA[ */
-var wc_add_to_cart_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":"\/?wc-ajax=%%endpoint%%","i18n_view_cart":"View cart","cart_url":"https:\/\/shoping.local\/cart\/","is_cart":"","cart_redirect_after_add":"no"};
-/* ]]> */
+<!-- Firebase App (the core Firebase SDK) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<!-- Firebase Auth -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<!-- Firebase Firestore -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBWqcmP4_q0dxTtfkMkPKi6EvS61Ghk42s",
+        authDomain: "fresh-basket-e05c0.firebaseapp.com",
+        projectId: "fresh-basket-e05c0",
+        storageBucket: "fresh-basket-e05c0.appspot.com",
+        messagingSenderId: "827276656041",
+        appId: "1:827276656041:web:f400f9bcc6b71b39b058b8"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // --- Cart Icon Count Update Logic ---
+    function updateCartIconCount(count) {
+        // Update all cart icon count spans
+        var qtySpans = document.querySelectorAll('.elementor-button-icon-qty');
+        qtySpans.forEach(function(span) {
+            span.textContent = count;
+            span.setAttribute('data-counter', count);
+        });
+    }
+
+    function listenToCartCount() {
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                db.collection('cart')
+                  .where('userId', '==', user.uid)
+                  .onSnapshot(function(snapshot) {
+                      var count = snapshot.size;
+                      updateCartIconCount(count);
+                  });
+            } else {
+                updateCartIconCount(0);
+            }
+        });
+    }
+
+    // Run on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        listenToCartCount();
+    });
 </script>
-<script type="text/javascript" src="/wp-content/plugins/woocommerce/assets/js/frontend/add-to-cart.min.js?ver=10.0.4" id="wc-add-to-cart-js" defer="defer" data-wp-strategy="defer"></script>
-<script type="text/javascript" src="/wp-content/plugins/woocommerce/assets/js/js-cookie/js.cookie.min.js?ver=2.1.4-wc.10.0.4" id="js-cookie-js" data-wp-strategy="defer"></script>
-<script type="text/javascript" id="woocommerce-js-extra">
-/* <![CDATA[ */
-var woocommerce_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":"\/?wc-ajax=%%endpoint%%","i18n_password_show":"Show password","i18n_password_hide":"Hide password"};
-/* ]]> */
-</script>
-<script type="text/javascript" src="/wp-content/plugins/woocommerce/assets/js/frontend/woocommerce.min.js?ver=10.0.4" id="woocommerce-js" defer="defer" data-wp-strategy="defer"></script>
 <script type="text/javascript" id="etheme-js-extra">
 /* <![CDATA[ */
 var etConfig = {"noresults":"No results were found!","ajaxSearchResultsArrow":"<svg version=\"1.1\" width=\"1em\" height=\"1em\" class=\"arrow\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\" xmlns:xlink=\"http:\/\/www.w3.org\/1999\/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 100 100\" style=\"enable-background:new 0 0 100 100;\" xml:space=\"preserve\"><path d=\"M99.1186676,94.8567734L10.286458,6.0255365h53.5340881c1.6616173,0,3.0132561-1.3516402,3.0132561-3.0127683\r\n\tS65.4821625,0,63.8205452,0H3.0137398c-1.6611279,0-3.012768,1.3516402-3.012768,3.0127683v60.8068047\r\n\tc0,1.6616135,1.3516402,3.0132523,3.012768,3.0132523s3.012768-1.3516388,3.012768-3.0132523V10.2854862L94.8577423,99.117691\r\n\tC95.4281311,99.6871109,96.1841202,100,96.9886856,100c0.8036041,0,1.5595856-0.3128891,2.129982-0.882309\r\n\tC100.2924805,97.9419327,100.2924805,96.0305862,99.1186676,94.8567734z\"><\/path><\/svg>","successfullyAdded":"Product added.","successfullyCopied":"Copied to clipboard","saleStarts":"Sale starts in:","saleFinished":"This sale already finished","confirmQuestion":"Are you sure?","viewCart":"View cart","cartPageUrl":"https:\/\/shoping.local\/cart\/","checkCart":"Please check your <a href='https:\/\/shoping.local\/cart\/'>cart.<\/a>","contBtn":"Continue shopping","checkBtn":"Checkout","ajaxProductAddedNotify":{"type":"mini_cart","linked_products_type":"upsell"},"variationGallery":"","quickView":{"type":"off_canvas","position":"right","layout":"default","variationGallery":"","css":{"quick-view":"        <link rel=\"stylesheet\" href=\"https:\/\/shoping.local\/wp-content\/themes\/xstore\/css\/modules\/woocommerce\/quick-view.min.css?ver=1.0\" type=\"text\/css\" media=\"all\" \/> \t\t","off-canvas":"        <link rel=\"stylesheet\" href=\"https:\/\/shoping.local\/wp-content\/themes\/xstore\/css\/modules\/layout\/off-canvas.min.css?ver=1.0\" type=\"text\/css\" media=\"all\" \/> \t\t","skeleton":"        <link rel=\"stylesheet\" href=\"https:\/\/shoping.local\/wp-content\/themes\/xstore\/css\/modules\/skeleton.min.css?ver=1.0\" type=\"text\/css\" media=\"all\" \/> \t\t","single-product":"        <link rel=\"stylesheet\" href=\"https:\/\/shoping.local\/wp-content\/themes\/xstore\/css\/modules\/woocommerce\/single-product\/single-product.min.css?ver=1.0\" type=\"text\/css\" media=\"all\" \/> \t\t","single-product-elements":"        <link rel=\"stylesheet\" href=\"https:\/\/shoping.local\/wp-content\/themes\/xstore\/css\/modules\/woocommerce\/single-product\/single-product-elements.min.css?ver=1.0\" type=\"text\/css\" media=\"all\" \/> \t\t","single-post-meta":"        <link rel=\"stylesheet\" href=\"https:\/\/shoping.local\/wp-content\/themes\/xstore\/css\/modules\/blog\/single-post\/meta.min.css?ver=1.0\" type=\"text\/css\" media=\"all\" \/> \t\t"}},"speedOptimization":{"imageLoadingOffset":"200px"},"popupAddedToCart":[],"builders":{"is_wpbakery":false},"Product":"Products","Pages":"Pages","Post":"Posts","Portfolio":"Portfolio","Product_found":"{{count}} Products found","Pages_found":"{{count}} Pages found","Post_found":"{{count}} Posts found","Portfolio_found":"{{count}} Portfolio found","show_more":"Show {{count}} more","show_all":"View all results","items_found":"{{count}} items found","item_found":"{{count}} item found","single_product_builder":"","fancy_select_categories":"","is_search_history":"0","search_history_length":"7","search_type":"input","search_ajax_history_time":"5","noSuggestionNoticeWithMatches":"No results were found!<p>No items matched your search {{search_value}}.<\/p>","ajaxurl":"https:\/\/shoping.local\/wp-admin\/admin-ajax.php","woocommerceSettings":{"is_woocommerce":true,"is_swatches":true,"ajax_filters":false,"ajax_pagination":false,"is_single_product_builder":false,"mini_cart_content_quantity_input":false,"widget_show_more_text":"more","widget_show_less_text":"Show less","sidebar_off_canvas_icon":"<svg version=\"1.1\" width=\"1em\" height=\"1em\" id=\"Layer_1\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\" xmlns:xlink=\"http:\/\/www.w3.org\/1999\/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 100 100\" style=\"enable-background:new 0 0 100 100;\" xml:space=\"preserve\"><path d=\"M94.8,0H5.6C4,0,2.6,0.9,1.9,2.3C1.1,3.7,1.3,5.4,2.2,6.7l32.7,46c0,0,0,0,0,0c1.2,1.6,1.8,3.5,1.8,5.5v37.5c0,1.1,0.4,2.2,1.2,3c0.8,0.8,1.8,1.2,3,1.2c0.6,0,1.1-0.1,1.6-0.3l18.4-7c1.6-0.5,2.7-2.1,2.7-3.9V58.3c0-2,0.6-3.9,1.8-5.5c0,0,0,0,0,0l32.7-46c0.9-1.3,1.1-3,0.3-4.4C97.8,0.9,96.3,0,94.8,0z M61.4,49.7c-1.8,2.5-2.8,5.5-2.8,8.5v29.8l-16.8,6.4V58.3c0-3.1-1-6.1-2.8-8.5L7.3,5.1h85.8L61.4,49.7z\"><\/path><\/svg>","ajax_add_to_cart_archives":true,"cart_url":"https:\/\/shoping.local\/cart\/","cart_redirect_after_add":false,"home_url":"https:\/\/shoping.local\/","shop_url":"https:\/\/shoping.local","cart_progress_currency_pos":"left","cart_progress_thousand_sep":",","cart_progress_decimal_sep":".","cart_progress_num_decimals":"2","is_smart_addtocart":true,"primary_attribute":"et_none"},"notices":{"ajax-filters":"Ajax error: cannot get filters result","post-product":"Ajax error: cannot get post\/product result","products":"Ajax error: cannot get products result","posts":"Ajax error: cannot get posts result","element":"Ajax error: cannot get element result","portfolio":"Ajax error: problem with ajax et_portfolio_ajax action","portfolio-pagination":"Ajax error: problem with ajax et_portfolio_ajax_pagination action","menu":"Ajax error: problem with ajax menu_posts action","noMatchFound":"No matches found","variationGalleryNotAvailable":"Variation Gallery not available on variation id","localStorageFull":"Seems like your localStorage is full"},"layoutSettings":{"layout":"","is_rtl":false,"is_mobile":false,"mobHeaderStart":1200,"menu_storage_key":"etheme_4e5c977bafda7a122c27b0f03ca4b541","ajax_dropdowns_from_storage":1},"sidebar":{"closed_pc_by_default":""},"et_global":{"classes":{"skeleton":"skeleton-body","mfp":"et-mfp-opened"},"is_customize_preview":false,"mobHeaderStart":1200},"etCookies":{"cache_time":3}};
@@ -926,21 +961,62 @@ var xstore_wishlist_params = {"ajaxurl":"https:\/\/shoping.local\/wp-admin\/admi
         
         <div class="etheme-product-list-item has-divider product type-product post-448 status-publish first instock product_cat-alcohol-free-drinks product_cat-all-beverages product_cat-applesauce-fruit-cups product_cat-bacon-sausages product_cat-bakery-cookies product_cat-bananas product_cat-berries-basket product_cat-berries-cherries product_cat-beverages-2 product_cat-bread-bakery product_cat-brownies-dessert-bars product_cat-bundles-kits product_cat-Cucumber product_cat-chips-snacks product_cat-cinnamon-buns product_cat-dairy-eggs-2 product_cat-dairy-eggs product_cat-deli-meat-charcuterie product_cat-donuts product_cat-eggs-butter product_cat-fresh-bread-cookies product_cat-frozen-seafood product_cat-fruits-vegetables product_cat-functional-beverages product_cat-functional-goods product_cat-grains-beans product_cat-grape-plantain product_cat-high-quality-meat product_cat-ice-cream-cones product_cat-jerky-dried-meat product_cat-kombucha product_cat-meat-seafood product_cat-milk-cream product_cat-nuts-dried-fruit product_cat- Cabbages-citrus product_cat-organic-fruits product_cat-plant-based product_cat-plant-based-proteins product_cat-vegetable product_cat-poultry product_cat-raw-meat product_cat-salmon product_cat-soda-mixers product_cat-tarts-sweets product_cat-tropical-fruits product_cat-vegetables product_cat-veggies-fruits product_cat-water-seltzers product_cat-yogurt-cultured-dairy has-post-thumbnail shipping-taxable purchasable product-type-simple">
         
-        <div class="etheme-product-list-image"><a href="/product/raw-natural-strawberry/index.html"><img fetchpriority="high" width="300" height="300" src="/wp-content/uploads/2024/02/Image-product-1.jpg" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="Savoy Cabbages" decoding="async"></a></div><div class="etheme-product-list-content"><h2 class="woocommerce-loop-product__title etheme-product-list-title"><a href="/Savoy Cabbage.html/ges/">Savoy Cabbages</a></h2><div class="star-rating-wrapper"><div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5</span></div></div>
-	<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#8377;</span>115.00</bdi></span></span>
-</div>        </div>
+                <div class="etheme-product-list-item has-divider product">
+                    <div class="etheme-product-list-image"><img fetchpriority="high" width="300" height="300" src="/wp-content/uploads/2024/02/Image-product-1.jpg" alt="Savoy Cabbages"></div>
+                    <div class="etheme-product-list-content">
+                        <h2 class="woocommerce-loop-product__title etheme-product-list-title">Savoy Cabbages</h2>
+                        <div class="star-rating-wrapper"><div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5</span></div></div>
+                        <span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#8377;</span>115.00</bdi></span></span>
+                        <button class="add-to-cart-btn" onclick="addToCart('Savoy Cabbages', 115.00)">Add to Cart</button>
+                    </div>
+                </div>
                 
         <div class="etheme-product-list-item has-divider product type-product post-790 status-publish first instock product_cat-alcohol-free-drinks product_cat-all-beverages product_cat-applesauce-fruit-cups product_cat-bacon-sausages product_cat-bakery-cookies product_cat-bananas product_cat-berries-basket product_cat-berries-cherries product_cat-beverages-2 product_cat-bread-bakery product_cat-brownies-dessert-bars product_cat-bundles-kits product_cat-Cucumber product_cat-chips-snacks product_cat-cinnamon-buns product_cat-dairy-eggs-2 product_cat-dairy-eggs product_cat-deli-meat-charcuterie product_cat-donuts product_cat-eggs-butter product_cat-fresh-bread-cookies product_cat-frozen-seafood product_cat-fruits-vegetables product_cat-functional-beverages product_cat-functional-goods product_cat-grains-beans product_cat-grape-plantain product_cat-high-quality-meat product_cat-ice-cream-cones product_cat-jerky-dried-meat product_cat-kombucha product_cat-meat-seafood product_cat-milk-cream product_cat-nuts-dried-fruit product_cat- Cabbages-citrus product_cat-organic-fruits product_cat-plant-based product_cat-plant-based-proteins product_cat-vegetable product_cat-poultry product_cat-raw-meat product_cat-salmon product_cat-soda-mixers product_cat-tarts-sweets product_cat-tropical-fruits product_cat-vegetables product_cat-veggies-fruits product_cat-water-seltzers product_cat-yogurt-cultured-dairy has-post-thumbnail shipping-taxable purchasable product-type-simple">
         
-        <div class="etheme-product-list-image"><a href="/product/raw-natural-strawberry/"><img width="300" height="300" src="/wp-content/uploads/2024/02/Image-product-2.jpg" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="Coriander" decoding="async"></a></div><div class="etheme-product-list-content"><h2 class="woocommerce-loop-product__title etheme-product-list-title"><a href="/product/raw-natural-strawberry/">Coriander</a></h2><div class="star-rating-wrapper"><div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5</span></div></div>
-	<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#8377;</span>5.49</bdi></span></span>
-</div>        </div>
+                <div class="etheme-product-list-item has-divider product">
+                    <div class="etheme-product-list-image"><img width="300" height="300" src="/wp-content/uploads/2024/02/Image-product-2.jpg" alt="Coriander"></div>
+                    <div class="etheme-product-list-content">
+                        <h2 class="woocommerce-loop-product__title etheme-product-list-title">Coriander</h2>
+                        <div class="star-rating-wrapper"><div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5</span></div></div>
+                        <span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#8377;</span>5.49</bdi></span></span>
+                        <button class="add-to-cart-btn" onclick="addToCart('Coriander', 5.49)">Add to Cart</button>
+                    </div>
+                </div>
                 
         <div class="etheme-product-list-item has-divider product type-product post-791 status-publish first instock product_cat-alcohol-free-drinks product_cat-all-beverages product_cat-applesauce-fruit-cups product_cat-bacon-sausages product_cat-bakery-cookies product_cat-bananas product_cat-berries-basket product_cat-berries-cherries product_cat-beverages-2 product_cat-bread-bakery product_cat-brownies-dessert-bars product_cat-bundles-kits product_cat-Cucumber product_cat-chips-snacks product_cat-cinnamon-buns product_cat-dairy-eggs-2 product_cat-dairy-eggs product_cat-deli-meat-charcuterie product_cat-donuts product_cat-eggs-butter product_cat-fresh-bread-cookies product_cat-frozen-seafood product_cat-fruits-vegetables product_cat-functional-beverages product_cat-functional-goods product_cat-grains-beans product_cat-grape-plantain product_cat-high-quality-meat product_cat-ice-cream-cones product_cat-jerky-dried-meat product_cat-kombucha product_cat-meat-seafood product_cat-milk-cream product_cat-nuts-dried-fruit product_cat- Cabbages-citrus product_cat-organic-fruits product_cat-plant-based product_cat-plant-based-proteins product_cat-vegetable product_cat-poultry product_cat-raw-meat product_cat-salmon product_cat-soda-mixers product_cat-tarts-sweets product_cat-tropical-fruits product_cat-vegetables product_cat-veggies-fruits product_cat-water-seltzers product_cat-yogurt-cultured-dairy has-post-thumbnail sale shipping-taxable purchasable product-type-simple">
         
-        <div class="etheme-product-list-image"><a href="/Cabbage.html"><img loading="lazy" width="300" height="300" src="/wp-content/uploads/2024/02/Image-product-13.jpg" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="Cauliflower" decoding="async"></a></div><div class="etheme-product-list-content"><h2 class="woocommerce-loop-product__title etheme-product-list-title"><a href="/Cabbage.html">Cauliflower</a></h2><div class="star-rating-wrapper"><div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5</span></div></div>
-	<span class="price"><del aria-hidden="true"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#8377;</span>8.00</bdi></span></del> <span class="screen-reader-text">Original price was: &#8377;8.00.</span><ins aria-hidden="true"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#8377;</span>5.00</bdi></span></ins><span class="screen-reader-text">Current price is: &#8377;5.00.</span></span>
-</div>        </div>
+                <div class="etheme-product-list-item has-divider product">
+                    <div class="etheme-product-list-image"><img loading="lazy" width="300" height="300" src="/wp-content/uploads/2024/02/Image-product-13.jpg" alt="Cauliflower"></div>
+                    <div class="etheme-product-list-content">
+                        <h2 class="woocommerce-loop-product__title etheme-product-list-title">Cauliflower</h2>
+                        <div class="star-rating-wrapper"><div class="star-rating" role="img" aria-label="Rated 5.00 out of 5"><span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5</span></div></div>
+                        <span class="price"><del aria-hidden="true"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#8377;</span>8.00</bdi></span></del> <ins aria-hidden="true"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">&#8377;</span>5.00</bdi></span></ins></span>
+                        <button class="add-to-cart-btn" onclick="addToCart('Cauliflower', 5.00)">Add to Cart</button>
+                    </div>
+                </div>
+</div>
+<script>
+// Add to Cart function for Firebase
+function addToCart(productName, price) {
+    auth.onAuthStateChanged(function(user) {
+        if (user) {
+            db.collection('cart').add({
+                userId: user.uid,
+                product: productName,
+                price: price,
+                quantity: 1,
+                addedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(function() {
+                alert(productName + ' added to your cart!');
+            }).catch(function(error) {
+                alert('Error adding to cart: ' + error.message);
+            });
+        } else {
+            alert('Please sign in to add items to your cart.');
+        }
+    });
+}
+</script>
         </div> <!-- .row -->				</div>
 				</div>
 					</div>

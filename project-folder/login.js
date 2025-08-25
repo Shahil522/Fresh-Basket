@@ -1,8 +1,14 @@
-
 const loginForm = document.getElementById('loginForm');
 const loginMessage = document.getElementById('loginMessage');
 
 if (loginForm && loginMessage && typeof auth !== 'undefined') {
+    // Check auth state and redirect if already logged in
+    auth.onAuthStateChanged(function(user) {
+        if (user) {
+            // Already logged in, redirect to dashboard
+            window.location.assign('/project-folder/dashboard.html');
+        }
+    });
     const loginContainer = document.querySelector('.login-container');
     if (loginContainer && typeof auth !== 'undefined') {
         const loginForm = loginContainer.querySelector('#loginForm');
@@ -62,3 +68,4 @@ if (loginForm && loginMessage && typeof auth !== 'undefined') {
         }
     }
 }
+

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Fresh Basket</title>
+    <link rel="stylesheet" href="../../project-folder/style.css">
+    <!-- Add any additional static CSS here -->
+</head>
+<body>
+    <header>
+        <h1>My Orders</h1>
+    </header>
+    <main>
+        <div id="orders-list">
+            <!-- Orders will be rendered here -->
+        </div>
+    </main>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script>
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBWqcmP4_q0dxTtfkMkPKi6EvS61Ghk42s",
+        authDomain: "fresh-basket-e05c0.firebaseapp.com",
+        projectId: "fresh-basket-e05c0",
+        storageBucket: "fresh-basket-e05c0.appspot.com",
+        messagingSenderId: "827276656041",
+        appId: "1:827276656041:web:f400f9bcc6b71b39b058b8"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+
+      // Example: Fetch orders for the current user (assumes user is signed in)
+      function renderOrders() {
+        auth.onAuthStateChanged(user => {
+          if (user) {
+            db.collection('orders').where('userId', '==', user.uid).get()
+              .then(snapshot => {
+                let html = '';
+                snapshot.forEach(doc => {
+                  const order = doc.data();
+                  html += `<div class="order-item">
+                    <h3>Order #${doc.id}</h3>
+                    <p>Date: ${order.date || 'N/A'}</p>
+                    <p>Status: ${order.status || 'N/A'}</p>
+                    <p>Total: $${order.total || '0.00'}</p>
+                    <details><summary>Items</summary><ul>`;
+                  (order.items || []).forEach(item => {
+                    html += `<li>${item.name} (x${item.quantity}) - $${item.price}</li>`;
+                  });
+                  html += `</ul></details></div>`;
+                });
+                document.getElementById('orders-list').innerHTML = html || '<p>No orders found.</p>';
+              });
+          } else {
+            document.getElementById('orders-list').innerHTML = '<p>Please sign in to view your orders.</p>';
+          }
+        });
+      }
+      renderOrders();
+    </script>
+</body>
+</html>
