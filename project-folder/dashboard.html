@@ -199,7 +199,9 @@ var xstore_wishlist_params = {"ajaxurl":"http:\/\/shoping.local\/wp-admin\/admin
 	
 		<div class="template-content">
 	<div class="page-wrapper">
-			<div data-elementor-type="header" data-elementor-id="5961" class="elementor elementor-5961 elementor-location-header" data-elementor-post-type="elementor_library">
+                        <div data-elementor-type="header" data-elementor-id="5961" class="elementor elementor-5961 elementor-location-header" data-elementor-post-type="elementor_library">
+                                <!-- Custom Dashboard Content Start -->
+                                
 			<div class="elementor-element elementor-element-13bd9e2 elementor-hidden-mobile e-flex e-con-boxed e-con e-parent" data-id="13bd9e2" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
 					<div class="e-con-inner">
 				<div class="elementor-element elementor-element-2f7a7940 etheme-elementor-menu etheme-elementor-widget-loaded elementor-widget elementor-widget-theme-etheme_nav_menu" data-id="2f7a7940" data-element_type="widget" data-widget_type="theme-etheme_nav_menu.default">
@@ -3288,24 +3290,47 @@ var xstore_wishlist_params = {"ajaxurl":"http:\/\/shoping.local\/wp-admin\/admin
 	</div>
 		
 <body>
-    <div class="dashboard-container">
-        <h1>Welcome to Your Dashboard</h1>
-        <p>You have successfully logged in! Explore your account, view your cart, or return to the shop.</p>
-        <div class="dashboard-actions">
-            <a href="/index.html"><button type="button">Go to Shop</button></a>
-            <a href="/cart/index.html"><button type="button">View Cart</button></a>
-        </div>
-    </div>
-    <script>
-        function logout() {
-            if (window.auth) {
-                window.auth.signOut().then(() => {
-                    window.location.href = 'sign-in.html';
-                });
-            } else {
-                window.location.href = 'sign-in.html';
-            }
-        }
+   <section style="max-width: 1100px; margin: 40px auto 24px auto; background: #fff; border-radius: 18px; box-shadow: 0 4px 24px rgba(0,0,0,0.07); padding: 32px 24px 24px 24px; display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start;">
+                                    <div style="flex: 1 1 260px; min-width: 260px; max-width: 320px; background: #f7faf7; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 24px; text-align: center;">
+                                        <img src="/wp-content/plugins/pro-elements/assets/images/logo-placeholder.png" alt="User" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 16px; border: 2px solid #e0e0e0;">
+                                        <h2 style="margin: 0 0 8px 0; font-size: 1.5rem; color: #243F2F;">Welcome, <span id="dashboard-username">Shahil Mansuri</span>!</h2>
+                                        <p style="color: #666; font-size: 1rem; margin-bottom: 0;">Glad to see you back at Fresh Basket.</p>
+                                    </div>
+                                    <div style="flex: 2 1 400px; min-width: 320px;">
+                                        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 24px;">
+                                            <a href="/my-account/orders/" style="flex:1; min-width: 140px; background: #e8f5e9; border-radius: 10px; padding: 20px; text-align: center; text-decoration: none; color: #243F2F; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: box-shadow 0.2s;">
+                                                <i class="et-icon et-shopping-bag-2" style="font-size: 2rem; display: block; margin-bottom: 8px;"></i>
+                                                <span style="font-weight: 600;">View Orders</span>
+                                            </a>
+                                            <a href="/my-account/?et-wishlist-page" style="flex:1; min-width: 140px; background: #fff3e0; border-radius: 10px; padding: 20px; text-align: center; text-decoration: none; color: #243F2F; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: box-shadow 0.2s;">
+                                                <i class="et-icon et-heart-2" style="font-size: 2rem; display: block; margin-bottom: 8px;"></i>
+                                                <span style="font-weight: 600;">Wishlist</span>
+                                            </a>
+                                            <a href="/my-account/" style="flex:1; min-width: 140px; background: #e3f2fd; border-radius: 10px; padding: 20px; text-align: center; text-decoration: none; color: #243F2F; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: box-shadow 0.2s;">
+                                                <i class="et-icon et-user-2" style="font-size: 2rem; display: block; margin-bottom: 8px;"></i>
+                                                <span style="font-weight: 600;">Account Settings</span>
+                                            </a>
+                                        </div>
+                                        <div style="background: #f1f8e9; border-radius: 10px; padding: 20px;">
+                                            <h3 style="margin-top: 0; color: #388e3c; font-size: 1.2rem;">Quick Stats</h3>
+                                            <ul style="list-style: none; padding: 0; margin: 0; display: flex; gap: 32px; flex-wrap: wrap;">
+                                                <li style="flex:1; min-width: 120px;">
+                                                    <span style="font-size: 1.5rem; font-weight: 700; color: #243F2F;">0</span><br>
+                                                    <span style="color: #666;">Orders</span>
+                                                </li>
+                                                <li style="flex:1; min-width: 120px;">
+                                                    <span style="font-size: 1.5rem; font-weight: 700; color: #243F2F;">0</span><br>
+                                                    <span style="color: #666;">Wishlist</span>
+                                                </li>
+                                                <li style="flex:1; min-width: 120px;">
+                                                    <span style="font-size: 1.5rem; font-weight: 700; color: #243F2F;">0</span><br>
+                                                    <span style="color: #666;">Cart Items</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </section>
+                                <!-- Custom Dashboard Content End -->
     </script>
     <div data-elementor-type="footer" data-elementor-id="5958" class="elementor elementor-5958 elementor-location-footer" data-elementor-post-type="elementor_library">
 			<div class="elementor-element elementor-element-d37a7ca e-grid e-con-full e-con e-parent" data-id="d37a7ca" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
