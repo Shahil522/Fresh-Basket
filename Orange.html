@@ -8,6 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="/project-folder/firebase-config.js"></script>
 <style>
+    body { margin-top: 0 !important; padding-top: 0 !important; }
     #user-menu { float: right; margin: 10px; }
     #user-menu .dropdown { position: relative; display: inline-block; }
     #user-menu .dropdown-content { display: none; position: absolute; background: #fff; min-width: 160px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); z-index: 1; }
@@ -15,7 +16,7 @@
     #user-menu .dropdown-content a, #user-menu .dropdown-content button { color: #333; padding: 12px 16px; text-decoration: none; display: block; background: none; border: none; width: 100%; text-align: left; }
     #user-menu .dropdown-content a:hover, #user-menu .dropdown-content button:hover { background: #f1f1f1; }
 </style>
-<div id="user-menu"></div>
+<div id="user-menu" style="position:fixed;top:20px;right:30px;z-index:9999;background:#fff;padding:10px 18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);font-size:16px;"></div>
 <script>
     function renderUserMenu(user) {
         if (user) {
@@ -3398,7 +3399,6 @@ var xstore_wishlist_params = {"ajaxurl":"\/wp-admin\/admin-ajax.php","confirmQue
 
 
 <div class="wp-block-group is-vertical is-content-justification-center is-nowrap is-layout-flex wp-container-core-group-is-layout-fc169830 wp-block-group-is-layout-flex">
-<div style="height:100px" aria-hidden="true" class="wp-block-spacer"></div>
 <div style="
    
    display: flex;
