@@ -3432,7 +3432,7 @@ var xstore_wishlist_params = {"ajaxurl":"\/wp-admin\/admin-ajax.php","confirmQue
             Rich in vitamins and minerals, ensuring healthy and delicious meals every time.
         </p>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <button style="
+            <button id="addToCartBtn" style="
                 width: 150px;
                 padding: 12px 0;
                 border: none;
@@ -3445,7 +3445,7 @@ var xstore_wishlist_params = {"ajaxurl":"\/wp-admin\/admin-ajax.php","confirmQue
             " onmouseover="this.style.backgroundColor='#f7ca00'" onmouseout="this.style.backgroundColor='#ffd814'">
                 Add to Cart
             </button>
-            <button style="
+            <button id="buyNowBtn" style="
                 width: 150px;
                 padding: 12px 0;
                 border: none;
@@ -3466,6 +3466,64 @@ var xstore_wishlist_params = {"ajaxurl":"\/wp-admin\/admin-ajax.php","confirmQue
 function changeImage(src) {
     document.getElementById('mainImage').src = src;
 }
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script>
+// Firestore cart logic
+const db = firebase.firestore();
+const product = {
+    id: 'savoy-cabbage-001',
+    name: 'Savoy Cabbages',
+    price: 115.00,
+    unit: 'kg',
+    image: '/wp-content/plugins/pro-elements/assets/images/R.png',
+    quantity: 1
+};
+
+function addToCart(product) {
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        alert('Please sign in to add items to your cart.');
+        window.location.href = '/sign-in.html';
+        return;
+    }
+    const itemRef = db.collection('carts').doc(user.uid).collection('items').doc(product.id);
+    itemRef.get().then((docSnapshot) => {
+        if (docSnapshot.exists) {
+            // Increment quantity
+            const currentQty = docSnapshot.data().quantity || 1;
+            itemRef.update({ quantity: currentQty + 1 })
+                .then(() => {
+                    alert('Added to cart!');
+                })
+                .catch((error) => {
+                    alert('Error updating cart: ' + error.message);
+                });
+        } else {
+            // Add new item with quantity 1
+            itemRef.set(product, { merge: true })
+                .then(() => {
+                    alert('Added to cart!');
+                })
+                .catch((error) => {
+                    alert('Error adding to cart: ' + error.message);
+                });
+        }
+    });
+}
+
+function buyNow(product) {
+    addToCart(product);
+    window.location.href = '/cart/index.html';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const addBtn = document.getElementById('addToCartBtn');
+    const buyBtn = document.getElementById('buyNowBtn');
+    if (addBtn) addBtn.onclick = () => addToCart(product);
+    if (buyBtn) buyBtn.onclick = () => buyNow(product);
+});
+</script>
 </script>
 
 	

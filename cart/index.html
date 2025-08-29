@@ -3702,7 +3702,77 @@ var wc_order_attribution = {"params":{"lifetime":1.0000000000000001e-5,"session"
 <script type="text/javascript" src="/wp-includes/js/comment-reply.min.js?ver=6.8.2" id="comment-reply-js" async="async" data-wp-strategy="async"></script>
 <script type="text/javascript" src="/wp-content/themes/xstore/js/libs/imagesLoaded.js?ver=4.1.4" id="et_imagesLoaded-js"></script>
 <script type="text/javascript" src="/wp-content/themes/xstore/js/modules/woocommerce.min.js?ver=1.0" id="et_woocommerce-js"></script>
-<script type="text/javascript" src="/wp-content/themes/xstore/js/modules/cart-page.min.js?ver=1.0" id="cart_page-js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+// Your Firebase config (imported from project-folder/firebase-config.js)
+import { firebaseConfig } from '../project-folder/firebase-config.js';
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+function renderCartItems(cartItems) {
+    const cartList = document.getElementById('firebase-cart-list');
+    const cartCount = document.getElementById('firebase-cart-count');
+    const cartTotal = document.getElementById('firebase-cart-total');
+    cartList.innerHTML = '';
+    let total = 0;
+    cartItems.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'cart-item';
+        li.innerHTML = `
+            <span class="cart-product-name">${item.productName}</span>
+            <span class="cart-product-qty">Qty: ${item.quantity}</span>
+            <span class="cart-product-price">₹${item.price}</span>
+            <button class="remove-from-cart" data-id="${item.id}">Remove</button>
+        `;
+        cartList.appendChild(li);
+        total += (item.price * item.quantity);
+    });
+    cartCount.textContent = cartItems.length;
+    cartTotal.textContent = `₹${total.toFixed(2)}`;
+}
+
+function setupRemoveButtons(user) {
+    document.querySelectorAll('.remove-from-cart').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const id = btn.getAttribute('data-id');
+            await deleteDoc(doc(db, 'carts', user.uid, 'items', id));
+        });
+    });
+}
+
+onAuthStateChanged(auth, user => {
+    if (user) {
+        const q = collection(db, 'carts', user.uid, 'items');
+        onSnapshot(q, (snapshot) => {
+            const cartItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderCartItems(cartItems);
+            setupRemoveButtons(user);
+        });
+        document.getElementById('firebase-cart-section').style.display = 'block';
+        document.getElementById('firebase-login-message').style.display = 'none';
+    } else {
+        document.getElementById('firebase-cart-section').style.display = 'none';
+        document.getElementById('firebase-login-message').style.display = 'block';
+    }
+});
+</script>
+</body>
+
+<!-- Firebase Cart Section -->
+<div id="firebase-login-message" style="display:none;text-align:center;margin:2em;">
+    <p>Please <a href="../sign-in.html">sign in</a> to view your cart.</p>
+</div>
+<section id="firebase-cart-section" style="display:none;max-width:600px;margin:2em auto;">
+    <h2>Your Cart (<span id="firebase-cart-count">0</span> items)</h2>
+    <ul id="firebase-cart-list" style="list-style:none;padding:0;"></ul>
+    <div style="margin-top:1em;font-weight:bold;">Total: <span id="firebase-cart-total">₹0.00</span></div>
+    <a href="../checkout/index.html" class="button" style="margin-top:1em;display:inline-block;">Proceed to Checkout</a>
+</section>
 <script type="text/javascript" src="/wp-content/themes/xstore/js/libs/jquery.lazyload.js?ver=2.0.0" id="jquery_lazyload-js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
