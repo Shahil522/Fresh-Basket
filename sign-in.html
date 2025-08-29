@@ -11,36 +11,25 @@
   <script src="/project-folder/firebase-config.js"></script>
 </head>
 <body>
-    <!-- Add your header and other body elements here -->
-
-    <div id="user-menu" style="display:none;">
-        <span class="user-name"></span>
-        <!-- Add other user menu elements here -->
+    <div class="login-container" style="max-width:400px;margin:60px auto;padding:32px 24px;background:#fff;border-radius:8px;box-shadow:0 2px 16px #eee;">
+      <h2 style="text-align:center;margin-bottom:24px;">Sign In</h2>
+      <form id="loginForm">
+        <div style="margin-bottom:16px;">
+          <label for="email">Email</label><br>
+          <input type="email" id="email" name="email" style="width:100%;padding:8px;" required>
+        </div>
+        <div style="margin-bottom:16px;">
+          <label for="password">Password</label><br>
+          <input type="password" id="password" name="password" style="width:100%;padding:8px;" required>
+        </div>
+        <div style="margin-bottom:16px;">
+          <input type="checkbox" id="rememberMe" name="rememberMe">
+          <label for="rememberMe">Remember Me</label>
+        </div>
+        <button type="submit" style="width:100%;padding:10px;background:#27ae60;color:#fff;border:none;border-radius:4px;font-weight:bold;">Sign In</button>
+        <div id="loginMessage" style="margin-top:16px;text-align:center;"></div>
+      </form>
     </div>
-
-    <div id="login-menu">
-        <!-- Add your login and register elements here -->
-    </div>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (typeof auth !== 'undefined') {
-        auth.onAuthStateChanged(function(user) {
-          const userMenu = document.getElementById('user-menu');
-          const loginMenu = document.getElementById('login-menu');
-          if (user) {
-            if (userMenu) {
-              userMenu.style.display = 'block';
-              userMenu.querySelector('.user-name').textContent = user.displayName || user.email;
-            }
-            if (loginMenu) loginMenu.style.display = 'none';
-          } else {
-            if (userMenu) userMenu.style.display = 'none';
-            if (loginMenu) loginMenu.style.display = 'block';
-          }
-        });
-      }
-    });
-    </script>
+    <script src="/project-folder/login.js"></script>
 </body>
 </html>

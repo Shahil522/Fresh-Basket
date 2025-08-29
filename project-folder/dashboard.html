@@ -212,9 +212,9 @@ var xstore_wishlist_params = {"ajaxurl":"http:\/\/shoping.local\/wp-admin\/admin
                 var logoutBtn = document.getElementById('logout-btn');
                 if (logoutBtn && typeof auth !== 'undefined') {
                     logoutBtn.onclick = function() {
-                        auth.signOut().then(function() {
-                            window.location.href = '/sign-in.html';
-                        });
+                                    auth.signOut().then(function() {
+                                        window.location.href = '/project-folder/index.html';
+                                    });
                     };
                     // Show user name/email if logged in
                     if (typeof auth.onAuthStateChanged === 'function') {

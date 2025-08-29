@@ -2,7 +2,60 @@
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" prefix="og: http://ogp.me/ns# fb: http://www.facebook.com/2008/fbml">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+<!-- Firebase and User Menu Scripts -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="/project-folder/firebase-config.js"></script>
+<style>
+    #user-menu { float: right; margin: 10px; }
+    #user-menu .dropdown { position: relative; display: inline-block; }
+    #user-menu .dropdown-content { display: none; position: absolute; background: #fff; min-width: 160px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); z-index: 1; }
+    #user-menu .dropdown:hover .dropdown-content { display: block; }
+    #user-menu .dropdown-content a, #user-menu .dropdown-content button { color: #333; padding: 12px 16px; text-decoration: none; display: block; background: none; border: none; width: 100%; text-align: left; }
+    #user-menu .dropdown-content a:hover, #user-menu .dropdown-content button:hover { background: #f1f1f1; }
+</style>
+<div id="user-menu"></div>
+<script>
+    function renderUserMenu(user) {
+        if (user) {
+            document.getElementById('user-menu').innerHTML = `
+                <div class="dropdown">
+                    <button style="background:none;border:none;cursor:pointer;font-weight:bold;">👤 ${user.displayName || user.email}</button>
+                    <div class="dropdown-content">
+                        <a href="/my-account/index.html">Profile</a>
+                        <a href="/my-account/orders/index.html">Orders</a>
+                        <button id="logout-btn">Logout</button>
+                    </div>
+                </div>
+            `;
+            setTimeout(() => {
+                const btn = document.getElementById('logout-btn');
+                if (btn) btn.onclick = function() {
+                    firebase.auth().signOut().then(() => {
+                        window.location.href = '/project-folder/index.html';
+                    });
+                };
+            }, 100);
+        } else {
+            document.getElementById('user-menu').innerHTML = `
+                <a href="/sign-in.html">Sign In</a> |
+                <a href="/my-account/index.html">Register</a>
+            `;
+        }
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+        if (window.firebase && firebase.auth) {
+            firebase.auth().onAuthStateChanged(renderUserMenu);
+        } else {
+            setTimeout(() => {
+                if (window.firebase && firebase.auth) {
+                    firebase.auth().onAuthStateChanged(renderUserMenu);
+                }
+            }, 1000);
+        }
+    });
+</script>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="max-image-preview:large">
 	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
